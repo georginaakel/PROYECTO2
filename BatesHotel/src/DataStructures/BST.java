@@ -8,26 +8,32 @@ package DataStructures;
  *
  * @author Georgina
  */
-public class BinSearchTree {
-    
-    private BinNode root;
+public class BST {
 
-    public BinSearchTree() {
+    private NodeB root;
+
+    public BST() {
         this.root = null;
     }
 
-    public BinSearchTree(BinNode node) {
+    public BST(NodeB node) {
         this.root = node;
     }
 
-    public BinNode getRoot() {
+    public NodeB getRoot() {
         return root;
     }
 
-    public void setRoot(BinNode root) {
+    public void setRoot(NodeB root) {
         this.root = root;
     }
-    
-    
-    
+
+    public void inorden(NodeB root) {
+        if (root != null){
+            inorden(root.getLeft());
+            System.out.println(root.getData() + " , ");
+            inorden(root.getRight());
+        }
+    }
+
 }

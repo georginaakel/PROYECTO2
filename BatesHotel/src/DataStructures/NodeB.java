@@ -6,14 +6,14 @@ package DataStructures;
 
 /**
  *
- * @author Georgina
+ * 
  */
-public class BinNode {
+public class NodeB {
     private int data;
-    private BinNode left;
-    private BinNode right;
+    private NodeB left;
+    private NodeB right;
 
-    public BinNode(int data) {
+    public NodeB(int data) {
         this.data = data;
         this.left = left;
         this.right = right;
@@ -27,19 +27,19 @@ public class BinNode {
         this.data = data;
     }
 
-    public BinNode getLeft() {
+    public NodeB getLeft() {
         return left;
     }
 
-    public void setLeft(BinNode left) {
+    public void setLeft(NodeB left) {
         this.left = left;
     }
 
-    public BinNode getRight() {
+    public NodeB getRight() {
         return right;
     }
 
-    public void setRight(BinNode right) {
+    public void setRight(NodeB right) {
         this.right = right;
     }
        
