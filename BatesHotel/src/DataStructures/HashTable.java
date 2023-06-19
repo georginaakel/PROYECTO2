@@ -11,7 +11,6 @@ package DataStructures;
 public class HashTable {
     
     private int size;
-    private List[] array;
     
     
     
