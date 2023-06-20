@@ -4,6 +4,7 @@
  */
 package bateshotel;
 
+import DataStructures.Util;
 import TXT.LecturaExcel;
 
 /**
@@ -16,8 +17,8 @@ public class BatesHotel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        LecturaExcel papi = new LecturaExcel();
-        papi.leerfechas();
+        Util u = new Util();
+        u.readDates();
     }
     
 }
