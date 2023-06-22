@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -24,53 +25,73 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Util {
     
         public void readDates() {
-        try
-        {
-            FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
-            
-            XSSFWorkbook libro = new XSSFWorkbook(f);
-
-            //seleccionamos la primera hoja
-            XSSFSheet hoja = libro.getSheetAt(0);
-
-            //Cogemos todas las filas de esa hoja
-            Iterator<Row> filas = hoja.iterator();
-            Iterator<Cell> celdas;
-
-            Row fila;
-            Cell celda;
-            while(filas.hasNext())
+            String str = "";
+            try
             {
-                //Cogemos la siguiente fila
-                fila = filas.next();
+                FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
 
-                //Cogemos todas las celdas de esa fila
-                celdas = fila.cellIterator();
+                XSSFWorkbook libro = new XSSFWorkbook(f);
 
-                //REcorremos todas las celdas
-                while (celdas.hasNext())
+                //seleccionamos la primera hoja
+                XSSFSheet hoja = libro.getSheetAt(0);
+
+                //Cogemos todas las filas de esa hoja
+                Iterator<Row> filas = hoja.iterator();
+                Iterator<Cell> celdas;
+
+                Row fila;
+                Cell celda;
+                while(filas.hasNext())
                 {
+                    //Cogemos la siguiente fila
+                    fila = filas.next();
 
-                    //Cogemos la siguiente celda.
-                    celda = celdas.next();
-                    if(celda.getCellType() == 0 && DateUtil.isCellDateFormatted(celda)){
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        String s = sdf.format(celda.getDateCellValue());
-                        System.out.println("fecha: " + s);
-                    }
-                    else if(celda.getCellType() == 0 && !DateUtil.isCellDateFormatted(celda)){
-                        System.out.println(celda.getNumericCellValue());
-                    }
-                    else if(celda.getCellType() == 1){
-                        System.out.println(celda.getStringCellValue());
+                    //Cogemos todas las celdas de esa fila
+                    celdas = fila.cellIterator();
+
+                    //REcorremos todas las celdas
+                    boolean run = true;
+                    DataFormatter dataFormatter = new DataFormatter();
+                    while (run)
+                    {
+
+                        //Cogemos la siguiente celda.
+                        celda = celdas.next();
+                        if(celda.getCellType() == 2){
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            String s = sdf.format(celda.getDateCellValue());
+                            System.out.println(s);
+                        }
+                        else{
+                            System.out.println(dataFormatter.formatCellValue(celda));
+                        }
+                        
+//                        if(celda.getCellType() == 0 && DateUtil.isCellDateFormatted(celda)){
+//                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                            String s = sdf.format(celda.getDateCellValue());
+//                            System.out.println("fecha: " + s);
+//                        }
+//                        
+//                        else if(celda.getCellType() == 1){
+//                            System.out.println(celda.getStringCellValue());
+//                        }
+//                        
+//                        else if(celda.getCellType() == 0 && !DateUtil.isCellDateFormatted(celda)){
+//                            System.out.println(celda.getNumericCellValue());
+//                        }
+//                        
+                        if(!celdas.hasNext()){
+                            run = false;
+                        }
                     }
                 }
             }
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-        }
+            catch(IOException ex){
+                System.out.println(ex.getMessage());
+            }
     }
+        
+    
     
     
 }
