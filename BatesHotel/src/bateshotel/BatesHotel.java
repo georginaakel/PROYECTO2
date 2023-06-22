@@ -4,7 +4,7 @@
  */
 package bateshotel;
 
-import Classes.Client;
+import Classes.Booking;
 import DataStructures.HashTable;
 import DataStructures.List;
 import DataStructures.Util;
@@ -20,11 +20,16 @@ public class BatesHotel {
      */
     public static void main(String[] args) {
         Util u = new Util();
+        HashTable rooms = new HashTable(500);
+        HashTable clients = new HashTable(500);
         HashTable hashtable = new HashTable(1500);
-        u.ReadExcel(hashtable);
-        
-        Client client = hashtable.get("Zuzana");
-        System.out.println(client.getName());
+        u.ReadBooking(hashtable);
+        u.Readclient(clients);
+        System.out.println(clients.getClient("").getName());
+//        u.Readroom(rooms);
+//        System.out.println(rooms.getroom("15").getNum_room());
+//        Booking client = hashtable.get("Zuzana");
+//        System.out.println(client.getName());
     }
     
 }
