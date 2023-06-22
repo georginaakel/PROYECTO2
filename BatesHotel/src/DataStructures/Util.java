@@ -6,6 +6,7 @@
 
 package DataStructures;
 
+import Classes.Client;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,7 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class Util {
     
-        public void readDates() {
+        public void ReadExcel(HashTable hashtable) {
             String str = "";
             try
             {
@@ -39,31 +40,35 @@ public class Util {
                 Iterator<Row> filas = hoja.iterator();
                 Iterator<Cell> celdas;
 
-                Row fila;
+                Row fila = filas.next();
                 Cell celda;
                 while(filas.hasNext())
                 {
-                    //Cogemos la siguiente fila
+                    
+                    //Agarramos la siguiente fila
                     fila = filas.next();
 
-                    //Cogemos todas las celdas de esa fila
+                    //Agarramos todas las celdas de esa fila
                     celdas = fila.cellIterator();
 
-                    //REcorremos todas las celdas
+                    //Recorremos todas las celdas
                     boolean run = true;
                     DataFormatter dataFormatter = new DataFormatter();
+                    String auxiliar = "";
                     while (run)
                     {
-
+                         
                         //Cogemos la siguiente celda.
                         celda = celdas.next();
                         if(celda.getCellType() == 2){
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                             String s = sdf.format(celda.getDateCellValue());
-                            System.out.println(s);
+                            auxiliar += s + "\n"; 
+//                            System.out.println(s);
                         }
                         else{
-                            System.out.println(dataFormatter.formatCellValue(celda));
+                            auxiliar += dataFormatter.formatCellValue(celda) + "\n";
+//                            System.out.println(dataFormatter.formatCellValue(celda));
                         }
                         
 //                        if(celda.getCellType() == 0 && DateUtil.isCellDateFormatted(celda)){
@@ -84,6 +89,9 @@ public class Util {
                             run = false;
                         }
                     }
+                    String[] arreglo = auxiliar.split("\n");
+                    Client cliente = new Client(arreglo[0],arreglo[1],arreglo[2],arreglo[3],arreglo[4],arreglo[5],arreglo[6],arreglo[7],arreglo[8]);
+                    hashtable.add(cliente);
                 }
             }
             catch(IOException ex){
