@@ -1,43 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Classes;
 
 /**
  *
- * @author Juan
+ * @author Orveo Di Luca
  */
 public class Client {
-    private String id;
-    private String name;
-    private String secondName;
-    private String email;
-    private String sex;
-    private String typeRoom;
-    private String phoneNumber;
+    private String name; 
+    private String lastName; 
+    private String email; 
+    private String gender; 
+    private String phone; 
     private String dateIn;
-    private String dateOut;
 
-    public Client(String id, String name, String secondName, String email, String sex, String typeRoom, String phoneNumber, String dateIn, String dateOut) {
-        this.id = id;
+    public Client(String name, String lastName, String email, String gender, String phone, String dateIn) {
         this.name = name;
-        this.secondName = secondName;
+        this.lastName = lastName;
         this.email = email;
-        this.sex = sex;
-        this.typeRoom = typeRoom;
-        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.phone = phone;
         this.dateIn = dateIn;
-        this.dateOut = dateOut;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -48,12 +33,12 @@ public class Client {
         this.name = name;
     }
 
-    public String getSecondName() {
-        return secondName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -64,28 +49,20 @@ public class Client {
         this.email = email;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getTypeRoom() {
-        return typeRoom;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTypeRoom(String typeRoom) {
-        this.typeRoom = typeRoom;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getDateIn() {
@@ -95,15 +72,6 @@ public class Client {
     public void setDateIn(String dateIn) {
         this.dateIn = dateIn;
     }
-
-    public String getDateOut() {
-        return dateOut;
-    }
-
-    public void setDateOut(String dateOut) {
-        this.dateOut = dateOut;
-    }
-    
     
     
 }
