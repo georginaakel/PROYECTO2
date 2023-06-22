@@ -6,6 +6,7 @@ package bateshotel;
 
 import Classes.Client;
 import DataStructures.HashTable;
+import DataStructures.List;
 import DataStructures.Util;
 
 /**
@@ -21,8 +22,9 @@ public class BatesHotel {
         Util u = new Util();
         HashTable hashtable = new HashTable(1500);
         u.ReadExcel(hashtable);
-        Client cliente = (Client) hashtable.get("Zuzana").get(0);
-        System.out.println(cliente.getName());
+        
+        Client client = hashtable.get("Zuzana");
+        System.out.println(client.getName());
     }
     
 }
