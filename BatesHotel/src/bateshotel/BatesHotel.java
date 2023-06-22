@@ -4,6 +4,8 @@
  */
 package bateshotel;
 
+import Classes.Client;
+import DataStructures.HashTable;
 import DataStructures.Util;
 
 /**
@@ -16,15 +18,11 @@ public class BatesHotel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        Util u = new Util();
-//        u.readDates();
-        int num = (int) (Math.random()*2+1);
-        if(num == 1){
-            System.out.println("Lo hace Juan");
-        }
-        else{
-            System.out.println("Lo hace este marico");
-        }
+        Util u = new Util();
+        HashTable hashtable = new HashTable(1500);
+        u.ReadExcel(hashtable);
+        Client cliente = (Client) hashtable.get("Zuzana").get(0);
+        System.out.println(cliente.getName());
     }
     
 }
