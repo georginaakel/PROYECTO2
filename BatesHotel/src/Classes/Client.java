@@ -8,55 +8,24 @@ package Classes;
  *
  * @author Orveo Di Luca
  */
-public class Client {
+public class Client extends Person {
+    //Atributos de la clase
+    private String numRoom;
     private String name; 
     private String lastName; 
     private String email; 
     private String gender; 
     private String phone; 
     private String dateIn;
-
-    public Client(String name, String lastName, String email, String gender, String phone, String dateIn) {
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.gender = gender;
+    
+    //Constructor
+    public Client(String numRoom, String name, String lastName, String email, String gender, String phone, String dateIn) {
+        super(name, lastName, email, gender, dateIn);
+        this.numRoom = numRoom;
         this.phone = phone;
-        this.dateIn = dateIn;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
+    
+    //========================Getters and Setters==========================
     public String getPhone() {
         return phone;
     }
@@ -65,13 +34,6 @@ public class Client {
         this.phone = phone;
     }
 
-    public String getDateIn() {
-        return dateIn;
-    }
-
-    public void setDateIn(String dateIn) {
-        this.dateIn = dateIn;
-    }
     
     
 }

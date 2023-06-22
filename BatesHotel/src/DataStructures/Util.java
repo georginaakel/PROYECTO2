@@ -8,6 +8,7 @@ package DataStructures;
 
 import Classes.Booking;
 import Classes.Client;
+import Classes.Historic;
 import Classes.Room;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,187 +27,85 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author Juan
  */
-public class Util {
+public class Util{
+    //Constantes
+    public static final int BOOKING = 0;
+    public static final int ROOM = 1;
+    public static final int CLIENT = 2;
+    public static final int HISTORIC = 3;
     
-        public void ReadBooking(HashTable hashtable) {
-            String str = "";
-            try
-            {
-                FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
+   
+    
+    //Prodecimiento que permite leer cualquier hoja del excel
+    public static void readExcel(HashTable hashtable, int type){
+        try{           
+            FileInputStream f = new FileInputStream("Booking_hotel.xlsx"); 
+            XSSFWorkbook libro = new XSSFWorkbook(f); 
+            XSSFSheet hoja = libro.getSheetAt(type); 
 
-                XSSFWorkbook libro = new XSSFWorkbook(f);
+            Iterator<Row> filas = hoja.iterator();
+            Iterator<Cell> celdas;
 
-                //seleccionamos la primera hoja
-                XSSFSheet hoja = libro.getSheetAt(0);
+            Row fila = filas.next();
+            Cell celda;
+            while(filas.hasNext()){
+                String auxiliar = "";
+                boolean run = true;
 
-                //Cogemos todas las filas de esa hoja
-                Iterator<Row> filas = hoja.iterator();
-                Iterator<Cell> celdas;
+                fila = filas.next();
+                celdas = fila.cellIterator();
 
-                Row fila = filas.next();
-                Cell celda;
-                while(filas.hasNext())
-                {
-                    
-                    //Agarramos la siguiente fila
-                    fila = filas.next();
+                DataFormatter dataFormatter = new DataFormatter();
+                while(run){                                         
+                    celda = celdas.next();
 
-                    //Agarramos todas las celdas de esa fila
-                    celdas = fila.cellIterator();
-
-                    //Recorremos todas las celdas
-                    boolean run = true;
-                    DataFormatter dataFormatter = new DataFormatter();
-                    String auxiliar = "";
-                    while (run)
-                    {
-                         
-                        //Cogemos la siguiente celda.
-                        celda = celdas.next();
-                        if(celda.getCellType() == 2){
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            String s = sdf.format(celda.getDateCellValue());
-                            auxiliar += s + "\n"; 
-//                            System.out.println(s);
-                        }
-                        else{
-                            auxiliar += dataFormatter.formatCellValue(celda) + "\n";
-                        }
-                                              
-                        if(!celdas.hasNext()){
-                            run = false;
-                        }
+                    if(celda.getCellType() == 2){
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        String s = sdf.format(celda.getDateCellValue());
+                        auxiliar += s + "\n"; 
                     }
-                    String[] arreglo = auxiliar.split("\n");
-                    Booking booking = new Booking(arreglo[0],arreglo[1],arreglo[2],arreglo[3],arreglo[4],arreglo[5],arreglo[6],arreglo[7],arreglo[8]);
-                    hashtable.add(booking);
-                }
-            }
-            catch(IOException ex){
-                System.out.println(ex.getMessage());
-            }
-    }
-        
-    public void Readroom(HashTable hashtable){
-        String str = "";
-            try
-            {
-                FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
-
-                XSSFWorkbook libro = new XSSFWorkbook(f);
-
-                 //seleccionamos la primera hoja
-                XSSFSheet hoja = libro.getSheetAt(1);
-
-                //Cogemos todas las filas de esa hoja
-                Iterator<Row> filas = hoja.iterator();
-                Iterator<Cell> celdas;
-
-                Row fila = filas.next();
-               Cell celda;
-                while(filas.hasNext())
-                {
-                    
-                    //Agarramos la siguiente fila
-                    fila = filas.next();
-
-                    //Agarramos todas las celdas de esa fila
-                    celdas = fila.cellIterator();
-
-                    //Recorremos todas las celdas
-                    boolean run = true;
-                    DataFormatter dataFormatter = new DataFormatter();
-                    String auxiliar = "";
-                    while (run)
-                    {
-                         
-                        //Cogemos la siguiente celda.
-                        celda = celdas.next();
-                        if(celda.getCellType() == 2){
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            String s = sdf.format(celda.getDateCellValue());
-                            auxiliar += s + "\n";                            
-                        }
-                        else{
-                            auxiliar += dataFormatter.formatCellValue(celda) + "\n";
-                        }                        
-                        if(!celdas.hasNext()){
-                            run = false;
-                        }
+                    else{
+                        auxiliar += dataFormatter.formatCellValue(celda) + "\n";
                     }
-                    String[] arreglo = auxiliar.split("\n");
-                    Room room = new Room(arreglo[0],arreglo[1],arreglo[2]);
-                    hashtable.addroom(room);
+
+                    if(!celdas.hasNext()){
+                        run = false;
+                    }
                 }
-            }
-            catch(IOException ex){
-                System.out.println(ex.getMessage());
-            }
-            
-            
+
+                if(type == BOOKING){               
+                    String[] array = auxiliar.split("\n");
+                    Booking booking = new Booking(array[0],array[1],array[2],array[3],array[4],array[5],array[6],array[7],array[8]);
+                    hashtable.add(booking, 0);
+                }
+
+                else if(type == ROOM){
+                    String[] array = auxiliar.split("\n");
+                    Room room = new Room(array[0],array[1],array[2]);
+                    hashtable.add(room, 1);
+                }
+
+                else if(type == CLIENT){
+                    String[] array = auxiliar.split("\n");
+                    if(array.length == 7){
+                        Client client = new Client(array[0], array[1], array[2], array[3], array[4], array[5], array[6]);
+                        hashtable.add(client, 2);
+                    }
+                }
+
+                else if(type == HISTORIC){
+                    String[] array = auxiliar.split("\n");
+                    Historic historic = new Historic(array[0],array[1],array[2],array[3],array[4],array[5],array[6]);
+                    hashtable.add(historic, 3);
+                }
+            }                                                                 
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
     
-    public void Readclient(HashTable hashtable){
-        String str = "";
-            try
-            {
-                FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
 
-                XSSFWorkbook libro = new XSSFWorkbook(f);
-
-                 //seleccionamos la primera hoja
-                XSSFSheet hoja = libro.getSheetAt(2);
-
-                //Cogemos todas las filas de esa hoja
-                Iterator<Row> filas = hoja.iterator();
-                Iterator<Cell> celdas;
-
-                Row fila = filas.next();
-                Cell celda;
-                while(filas.hasNext())
-                {
-                    
-                    //Agarramos la siguiente fila
-                    fila = filas.next();
-
-                    //Agarramos todas las celdas de esa fila
-                    celdas = fila.cellIterator();
-
-                    //Recorremos todas las celdas
-                    boolean run = true;
-                    DataFormatter dataFormatter = new DataFormatter();
-                    String auxiliar = "";
-                    while (run)
-                    {
-                         
-                        //Cogemos la siguiente celda.
-                        celda = celdas.next();
-                        
-                        if(celda.getCellType() == 2){
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            String s = sdf.format(celda.getDateCellValue());
-                            auxiliar += s + "\n";                            
-                        }
-                        else{
-
-                            if(!dataFormatter.formatCellValue(celda).isBlank()){
-                                auxiliar += dataFormatter.formatCellValue(celda) + "\n";
-                            }
-                            
-                        }                        
-                        if(!celdas.hasNext()){
-                            run = false;
-                        }
-                    }
-                    String[] arreglo = auxiliar.split("\n");
-                    Client client = new Client(arreglo[0],arreglo[1],arreglo[2],arreglo[3],arreglo[4],arreglo[5]);
-                    hashtable.addClient(client);
-                }
-            }
-            catch(IOException ex){
-                System.out.println(ex.getMessage());
-            }
-    }
         
     
     

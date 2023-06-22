@@ -9,30 +9,33 @@ package Classes;
  * @author Orveo Di Luca
  */
 public class Room {
-    private String num_room; 
-    private String type_room;
+    //Atributos de la clase
+    private String numRoom; 
+    private String typeRoom;
     private String floor;
-
-    public Room(String num_room, String type_room, String floor) {
-        this.num_room = num_room;
-        this.type_room = type_room;
+    
+    //Constructor
+    public Room(String numRoom, String typeRoom, String floor) {
+        this.numRoom = numRoom;
+        this.typeRoom = typeRoom;
         this.floor = floor;
     }
-
-    public String getNum_room() {
-        return num_room;
+    
+    //========================Getters and Setters=========================
+    public String getNumRoom() {
+        return numRoom;
     }
 
-    public void setNum_room(String num_room) {
-        this.num_room = num_room;
+    public void setNumRoom(String num_room) {
+        this.numRoom = num_room;
     }
 
-    public String getType_room() {
-        return type_room;
+    public String getTypeRoom() {
+        return typeRoom;
     }
 
-    public void setType_room(String type_room) {
-        this.type_room = type_room;
+    public void setTypeRoom(String type_room) {
+        this.typeRoom = type_room;
     }
 
     public String getFloor() {
