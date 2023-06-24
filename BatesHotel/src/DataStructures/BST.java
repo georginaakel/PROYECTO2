@@ -4,11 +4,13 @@
  */
 package DataStructures;
 
+import Classes.Booking;
+
 /**
  *
  * @author Georgina
  */
-public class BST {
+public class BST<T> {
 
     private NodeB root;
 
@@ -28,12 +30,53 @@ public class BST {
         this.root = root;
     }
 
-    public void inorden(NodeB root) {
-        if (root != null){
-            inorden(root.getLeft());
-            System.out.println(root.getData() + " , ");
-            inorden(root.getRight());
+    public void insert(NodeB root, NodeB newNode) {
+        if (this.root == null) {
+            this.root = newNode;
+        } else {
+            if (newNode.getData() < root.getData()) {
+                if (root.getLeft() == null) {
+                    root.setLeft(newNode);
+                } else {
+                    insert(root.getLeft(), newNode);
+                }
+            } else if (newNode.getData() > root.getData()) {
+                if (root.getRight() == null) {
+                    root.setRight(newNode);
+                } else {
+                    insert(root.getRight(), newNode);
+                }
+            } else {
+                System.out.println("El elemento ya se encuentra en el Árbol");
+            }
         }
     }
-
+    
+    public void insertbooking(NodeB root, Booking booking){
+        if (this.root == null) {
+            NodeB node = new NodeB(Integer.parseInt(booking.getId()));
+            this.root = node ;
+        } else {
+            NodeB node = new NodeB(Integer.parseInt(booking.getId()));
+            if (node.getData() < root.getData()) {
+                if (root.getLeft() == null) {
+                    root.setLeft(node);
+                } else {
+                    insert(root.getLeft(), node);
+                }
+            } else if (node.getData() > root.getData()) {
+                if (root.getRight() == null) {
+                    root.setRight(node);
+                } else {
+                    insert(root.getRight(), node);
+                }
+            } else {
+                System.out.println("El elemento ya se encuentra en el Árbol");
+            }
+        }
+    }
+    
+    public void GetBooking(int ci){
+        
+    }
 }

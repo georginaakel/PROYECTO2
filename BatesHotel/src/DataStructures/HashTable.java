@@ -174,8 +174,16 @@ public class HashTable<T> {
         }
         return null;
     }
-    
-    
+    //Obtiene el indice de cada valor del hashtable
+    public List getindex(int idx){
+        if(idx > size || idx < 0){
+            System.out.println("No se encuentra el indice.");
+            return null;
+        }else{
+            List aux = table[idx];
+            return aux;
+        }
+    }
 
 }
 
