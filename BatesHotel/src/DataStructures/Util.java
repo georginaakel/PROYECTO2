@@ -131,5 +131,19 @@ public class Util<T> {
            
         }
     }
+    
+    //Arbol para el historico
+    public static void HashToTreeHistc(HashTable ht, BST bst){
+        for (int x = 0; x < 10; x++)
+        {
+            if(ht.getindex(x) != null){
+                List aux = ht.getindex(x);
+                Historic historic = (Historic) aux.get(0);
+                bst.insert(bst.getRoot(),Integer.parseInt( historic.getNumRoom()));
+            }
+        }
+    }
+    
+    
 
 }

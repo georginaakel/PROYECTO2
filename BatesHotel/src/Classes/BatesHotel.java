@@ -34,28 +34,18 @@ public class BatesHotel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        HashTable<Booking> ht = new HashTable(1500);
-        Util.readExcel(ht, BOOKING);
+        HashTable<Historic> ht = new HashTable(1500);
+        Util.readExcel(ht, HISTORIC);
         
         BST arbol = new BST();
-        Util.hashToTree(ht, arbol);
+        Util.HashToTreeHistc(ht, arbol);
        
-        Booking bk = arbol.searcBooking(ht, arbol.getRoot(), 18383175);
-        System.out.println(bk.getName());
-
-        
-
-
-
-        
-        
-        
-
-
-        
-        
-
-
+        List list = ht.gethistoric(48);
+        for (int x = 0; x < list.len(); x++)
+        {
+            Historic h = (Historic) list.get(x);
+            System.out.println(h.getNumRoom() + " " + h.getName());
+        }
     }
     
     

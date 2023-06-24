@@ -91,6 +91,12 @@ public class HashTable<T> {
         String num = format.format(id);
         return hash(num);
     }
+    //El Hash del historico.
+    public int hashHistoric(int room){
+        double num = Math.log(room);
+        num *= 100; 
+        return (int) num%size;
+    }
         
     //Añade al hashtable el elemento pasado por parametro 
     public void add(T data, int type){
@@ -138,7 +144,7 @@ public class HashTable<T> {
         
         else if(type == HISTORIC){
             Historic historic = (Historic) data;
-            int idx = hash(historic.getName(), historic.getLastName());
+            int idx = hashHistoric(Integer.parseInt(historic.getNumRoom()));
             if(table[idx] == null){
                 List list = new List(historic);
                 table[idx] = list;
@@ -240,6 +246,16 @@ public class HashTable<T> {
         }else{
             List aux = table[idx];
             return aux;
+        }
+    }
+    
+    //Obtengo la habitación en el historico.
+    public List gethistoric(int room){
+        int idx = hashHistoric(room);
+        if(table[idx] == null){
+            return null;   
+        }else{
+            return table[idx];
         }
     }
 
