@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package DataStructures;
 
 import Classes.Booking;
@@ -22,33 +21,34 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-        
+
 /**
  *
  * @author Juan
  */
-public class Util{
+public class Util<T> {
+
     //Constantes
     public static final int BOOKING = 0;
     public static final int ROOM = 1;
     public static final int CLIENT = 2;
     public static final int HISTORIC = 3;
-    
-   
-    
+
     //Prodecimiento que permite leer cualquier hoja del excel
-    public static void readExcel(HashTable hashtable, int type){
-        try{           
-            FileInputStream f = new FileInputStream("Booking_hotel.xlsx"); 
-            XSSFWorkbook libro = new XSSFWorkbook(f); 
-            XSSFSheet hoja = libro.getSheetAt(type); 
+    public static void readExcel(HashTable hashtable, int type) {
+        try
+        {
+            FileInputStream f = new FileInputStream("Booking_hotel.xlsx");
+            XSSFWorkbook libro = new XSSFWorkbook(f);
+            XSSFSheet hoja = libro.getSheetAt(type);
 
             Iterator<Row> filas = hoja.iterator();
             Iterator<Cell> celdas;
 
             Row fila = filas.next();
             Cell celda;
-            while(filas.hasNext()){
+            while (filas.hasNext())
+            {
                 String auxiliar = "";
                 boolean run = true;
 
@@ -56,58 +56,80 @@ public class Util{
                 celdas = fila.cellIterator();
 
                 DataFormatter dataFormatter = new DataFormatter();
-                while(run){                                         
+                while (run)
+                {
                     celda = celdas.next();
 
-                    if(celda.getCellType() == 2){
+                    if (celda.getCellType() == 2)
+                    {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         String s = sdf.format(celda.getDateCellValue());
-                        auxiliar += s + "\n"; 
-                    }
-                    else{
+                        auxiliar += s + "\n";
+                    } else
+                    {
                         auxiliar += dataFormatter.formatCellValue(celda) + "\n";
                     }
 
-                    if(!celdas.hasNext()){
+                    if (!celdas.hasNext())
+                    {
                         run = false;
                     }
                 }
 
-                if(type == BOOKING){               
+                if (type == BOOKING)
+                {
                     String[] array = auxiliar.split("\n");
-                    Booking booking = new Booking(array[0],array[1],array[2],array[3],array[4],array[5],array[6],array[7],array[8]);
+                    Booking booking = new Booking(array[0], array[1], array[2], array[3], array[4], array[5], array[6], array[7], array[8]);
                     hashtable.add(booking, 0);
-                }
-
-                else if(type == ROOM){
+                } else if (type == ROOM)
+                {
                     String[] array = auxiliar.split("\n");
-                    Room room = new Room(array[0],array[1],array[2]);
+                    Room room = new Room(array[0], array[1], array[2]);
                     hashtable.add(room, 1);
-                }
-
-                else if(type == CLIENT){
+                } else if (type == CLIENT)
+                {
                     String[] array = auxiliar.split("\n");
-                    if(array.length == 7){
+                    if (array.length == 7)
+                    {
                         Client client = new Client(array[0], array[1], array[2], array[3], array[4], array[5], array[6]);
                         hashtable.add(client, 2);
                     }
-                }
-
-                else if(type == HISTORIC){
+                } else if (type == HISTORIC)
+                {
                     String[] array = auxiliar.split("\n");
-                    Historic historic = new Historic(array[0],array[1],array[2],array[3],array[4],array[5],array[6]);
+                    Historic historic = new Historic(array[0], array[1], array[2], array[3], array[4], array[5], array[6]);
                     hashtable.add(historic, 3);
                 }
-            }                                                                 
-        }
-        catch(IOException ex){
+            }
+        } catch (IOException ex)
+        {
             System.out.println(ex.getMessage());
         }
     }
-    
 
-        
-    
-    
-    
+    //Agarra los elementos del hashtable y los coloca en el arbol binario de busqueda.
+    public void hashtotree(HashTable ht, BST bst) {
+        for (int x = 0; x < ht.getSize(); x++)
+        {
+            if (ht.getindex(x) != null)
+            {
+                List aux = ht.getindex(x);
+                if (aux.len() > 1)
+                {
+                    for (int j = 0; j < aux.len(); j++)
+                    {
+                        Booking data = (Booking) aux.get(j);
+                        bst.insertbooking(bst.getRoot(), data);
+                        
+                    }
+                }
+                else if(aux.len() == 1){
+                    Booking data = (Booking) aux.get(0);
+                    bst.insertbooking(bst.getRoot(), data);
+                }
+            }
+           
+        }
+    }
+
 }
