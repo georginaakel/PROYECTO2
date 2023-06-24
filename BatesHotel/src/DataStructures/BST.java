@@ -5,6 +5,7 @@
 package DataStructures;
 
 import Classes.Booking;
+import static DataStructures.HashTable.BOOKING;
 
 /**
  *
@@ -29,22 +30,47 @@ public class BST<T> {
     public void setRoot(NodeB root) {
         this.root = root;
     }
+    
+    public void preOrder(NodeB root){
+        if(root != null){
+            System.out.println(root.getData() + ", ");
+            preOrder(root.getLeft());
+            preOrder(root.getRight());
+        }
+    }
+    
+    public void inOrder(NodeB root){
+        if(root != null){
+            inOrder(root.getLeft());
+            System.out.println(root.getData() + ", ");
+            inOrder(root.getRight());
+        }
+    }
+    
+    public void postOrder(NodeB root){
+        if(root != null){
+            postOrder(root.getLeft());
+            postOrder(root.getRight());
+            System.out.println(root.getData() + ", ");
+        }
+    }
 
-    public void insert(NodeB root, NodeB newNode) {
+    public void insert(NodeB root, int data) {
+        NodeB newNode = new NodeB(data);
         if (this.root == null) {
             this.root = newNode;
         } else {
-            if (newNode.getData() < root.getData()) {
+            if (data < root.getData()) {
                 if (root.getLeft() == null) {
                     root.setLeft(newNode);
                 } else {
-                    insert(root.getLeft(), newNode);
+                    insert(root.getLeft(), data);
                 }
             } else if (newNode.getData() > root.getData()) {
                 if (root.getRight() == null) {
                     root.setRight(newNode);
                 } else {
-                    insert(root.getRight(), newNode);
+                    insert(root.getRight(), data);
                 }
             } else {
                 System.out.println("El elemento ya se encuentra en el Árbol");
@@ -52,23 +78,24 @@ public class BST<T> {
         }
     }
     
-    public void insertbooking(NodeB root, Booking booking){
+    public void insertBooking(NodeB root, Booking booking){
+        String StrId = booking.getId().replace(".", "");
+        int id = Integer.parseInt(StrId);
+        NodeB node = new NodeB(id);
         if (this.root == null) {
-            NodeB node = new NodeB(Integer.parseInt(booking.getId()));
             this.root = node ;
         } else {
-            NodeB node = new NodeB(Integer.parseInt(booking.getId()));
             if (node.getData() < root.getData()) {
                 if (root.getLeft() == null) {
                     root.setLeft(node);
                 } else {
-                    insert(root.getLeft(), node);
+                    insertBooking(root.getLeft(), booking);
                 }
             } else if (node.getData() > root.getData()) {
                 if (root.getRight() == null) {
                     root.setRight(node);
                 } else {
-                    insert(root.getRight(), node);
+                    insertBooking(root.getRight(), booking);
                 }
             } else {
                 System.out.println("El elemento ya se encuentra en el Árbol");
@@ -76,7 +103,32 @@ public class BST<T> {
         }
     }
     
-    public void GetBooking(int ci){
+    public NodeB search(NodeB root, int data){
+        if (this.root == null){
+            return null;
+        } else{
+            if ((int)root.getData() == data){
+                return root;
+            } else{
+                if (data < (int)root.getData()){
+                    return search(root.getLeft(), data);
+                } else {
+                    return search(root.getRight(), data);
+                }
+            }
+        }
+    }
+    
+    public Booking searcBooking(HashTable ht, NodeB current, int data){
+        NodeB node = search(current, data);
+        if(node == null){
+            return null;
+        }
+        else{
+            Booking booking = ht.get1(node.getData());
+            return booking;
+        }
         
     }
+    
 }

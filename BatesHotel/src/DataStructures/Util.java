@@ -108,7 +108,7 @@ public class Util<T> {
     }
 
     //Agarra los elementos del hashtable y los coloca en el arbol binario de busqueda.
-    public void hashtotree(HashTable ht, BST bst) {
+    public static void hashToTree(HashTable ht, BST bst) {
         for (int x = 0; x < ht.getSize(); x++)
         {
             if (ht.getindex(x) != null)
@@ -119,13 +119,13 @@ public class Util<T> {
                     for (int j = 0; j < aux.len(); j++)
                     {
                         Booking data = (Booking) aux.get(j);
-                        bst.insertbooking(bst.getRoot(), data);
+                        bst.insertBooking(bst.getRoot(), data);
                         
                     }
                 }
                 else if(aux.len() == 1){
                     Booking data = (Booking) aux.get(0);
-                    bst.insertbooking(bst.getRoot(), data);
+                    bst.insertBooking(bst.getRoot(), data);
                 }
             }
            

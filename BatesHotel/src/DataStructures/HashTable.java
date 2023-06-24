@@ -9,6 +9,7 @@ import Classes.Client;
 import Classes.Historic;
 import Classes.Person;
 import Classes.Room;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -75,12 +76,27 @@ public class HashTable<T> {
             return (int) hash % size;
         }
     }
+    
+    //A
+    public int hash(String id){
+        String[] array = id.split("\\.");
+        int num1 = Integer.parseInt(array[0]);
+        int num2 = Integer.parseInt(array[1]);
+        int num3 = Integer.parseInt(array[2]);
+        return (num1 * num2 * num3)%size;
+    }
+    
+    public int hash(int id){
+        DecimalFormat format = new DecimalFormat("#,###");
+        String num = format.format(id);
+        return hash(num);
+    }
         
     //Añade al hashtable el elemento pasado por parametro 
     public void add(T data, int type){
         if(type == BOOKING){
             Booking booking = (Booking) data;
-            int idx = hash(booking.getName(), booking.getLastName());
+            int idx = hash(booking.getId());
             if(table[idx] == null){
                 List list = new List(booking);
                 table[idx] = list;
@@ -174,6 +190,48 @@ public class HashTable<T> {
         }
         return null;
     }
+    
+    public Booking get(String id){
+        int idx = hash(id);
+        if(table[idx] != null){
+            if(table[idx].len() == 1){
+                return (Booking) table[idx].get(0);
+            }
+            else if(table[idx].len() > 1){
+                List list = table[idx];
+                for(int x = 0; x < list.len(); x++){
+                    Booking booking = (Booking) list.get(x);
+                    if(booking.getId().equals(id)){
+                        return (Booking) booking;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public Booking get1(int id){
+        int idx = hash(id);
+        if(table[idx] != null){
+            if(table[idx].len() == 1){
+                return (Booking) table[idx].get(0);
+            }
+            else if(table[idx].len() > 1){
+                List list = table[idx];
+                for(int x = 0; x < list.len(); x++){
+                    Booking booking = (Booking) list.get(x);
+                    DecimalFormat format = new DecimalFormat("#,###");
+                    String num = format.format(id);
+                    if(booking.getId().equals(num)){
+                        return (Booking) booking;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    
     //Obtiene el indice de cada valor del hashtable
     public List getindex(int idx){
         if(idx > size || idx < 0){
