@@ -77,25 +77,19 @@ public class HashTable<T> {
         }
     }
     
-    //A
+    //Hash para generar una llave apartir de la cedula en forma de string
     public int hash(String id){
-        String[] array = id.split("\\.");
-        int num1 = Integer.parseInt(array[0]);
-        int num2 = Integer.parseInt(array[1]);
-        int num3 = Integer.parseInt(array[2]);
-        return (num1 * num2 * num3)%size;
+        id = id.replace(".", "");
+        double num = Math.log(Integer.parseInt(id));
+        num *= 100; 
+        return (int) num % size;
     }
     
+    //Hash para generar una llave apartir de la cedula en forma de entero o el numero de habitacion
     public int hash(int id){
         DecimalFormat format = new DecimalFormat("#,###");
         String num = format.format(id);
         return hash(num);
-    }
-    //El Hash del historico.
-    public int hashHistoric(int room){
-        double num = Math.log(room);
-        num *= 100; 
-        return (int) num%size;
     }
         
     //Añade al hashtable el elemento pasado por parametro 
@@ -144,7 +138,7 @@ public class HashTable<T> {
         
         else if(type == HISTORIC){
             Historic historic = (Historic) data;
-            int idx = hashHistoric(Integer.parseInt(historic.getNumRoom()));
+            int idx = hash(Integer.parseInt(historic.getNumRoom()));
             if(table[idx] == null){
                 List list = new List(historic);
                 table[idx] = list;
@@ -162,7 +156,10 @@ public class HashTable<T> {
         int idx = hash(name, lastName);
         if(table[idx] != null){
             if(table[idx].len() == 1){
-                return (T) table[idx].get(0);
+                Person value = (Person) table[idx].get(0);
+                if(value.getName().equals(name) && value.getLastName().equals(lastName)){
+                        return (T) value;
+                    }
             }
             else if(table[idx].len() > 1){
                 List list = table[idx];
@@ -197,6 +194,7 @@ public class HashTable<T> {
         return null;
     }
     
+    
     public Booking get(String id){
         int idx = hash(id);
         if(table[idx] != null){
@@ -215,6 +213,7 @@ public class HashTable<T> {
         }
         return null;
     }
+    
     
     public Booking get1(int id){
         int idx = hash(id);
@@ -251,7 +250,7 @@ public class HashTable<T> {
     
     //Obtengo la habitación en el historico.
     public List gethistoric(int room){
-        int idx = hashHistoric(room);
+        int idx = hash(room);
         if(table[idx] == null){
             return null;   
         }else{

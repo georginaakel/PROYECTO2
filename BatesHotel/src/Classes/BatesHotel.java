@@ -13,6 +13,8 @@ import static DataStructures.Util.BOOKING;
 import static DataStructures.Util.CLIENT;
 import static DataStructures.Util.HISTORIC;
 import static DataStructures.Util.ROOM;
+import Interfaces.LoadWindow;
+import Interfaces.Main;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -34,18 +36,8 @@ public class BatesHotel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        HashTable<Historic> ht = new HashTable(1500);
-        Util.readExcel(ht, HISTORIC);
-        
-        BST arbol = new BST();
-        Util.HashToTreeHistc(ht, arbol);
-       
-        List list = ht.gethistoric(48);
-        for (int x = 0; x < list.len(); x++)
-        {
-            Historic h = (Historic) list.get(x);
-            System.out.println(h.getNumRoom() + " " + h.getName());
-        }
+        LoadWindow loadwindow = new LoadWindow();
+        loadwindow.setVisible(true);
     }
     
     
