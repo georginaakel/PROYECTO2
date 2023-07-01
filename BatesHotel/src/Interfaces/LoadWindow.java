@@ -4,12 +4,14 @@ package Interfaces;
 import Classes.Booking;
 import Classes.Client;
 import Classes.Historic;
+import Classes.Room;
 import DataStructures.BST;
 import DataStructures.HashTable;
 import static DataStructures.HashTable.BOOKING;
 import static DataStructures.HashTable.CLIENT;
 import static DataStructures.HashTable.HISTORIC;
-import DataStructures.Util;
+import Classes.Util;
+import static DataStructures.HashTable.ROOM;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -26,12 +28,15 @@ public class LoadWindow extends javax.swing.JFrame {
     private HashTable clients;
     private HashTable bookings;
     private HashTable historics;
+    private HashTable rooms;
+
     
     //Constructor
     public LoadWindow() {
         this.clients = new HashTable<Client>(500);
         this.bookings = new HashTable<Booking>(2000);
         this.historics = new HashTable<Historic>(2000);
+        this.rooms = new HashTable<Room>(500);
         initComponents();
     }
 
@@ -97,13 +102,9 @@ public class LoadWindow extends javax.swing.JFrame {
         Util.readExcel(clients, CLIENT);
         Util.readExcel(bookings, BOOKING);
         Util.readExcel(historics, HISTORIC);
+        Util.readExcel(rooms, ROOM);
         
-        BST bstBooking = new BST();
-        BST bstHistoric = new BST();
-        Util.hashToTree(bookings, bstBooking);
-        Util.hashToTreeHistc(historics, bstHistoric);           
-        
-        Main main = new Main(clients, historics, bookings, bstBooking, bstHistoric);
+        Main main = new Main(clients, bookings, historics, rooms);
         this.dispose();
         main.setVisible(true);
     }//GEN-LAST:event_chargeActionPerformed

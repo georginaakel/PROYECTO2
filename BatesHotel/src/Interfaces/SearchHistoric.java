@@ -11,28 +11,27 @@ import Classes.Historic;
 import Classes.Room;
 import DataStructures.BST;
 import DataStructures.HashTable;
-import Classes.Util;
-import static DataStructures.HashTable.BOOKING;
+import DataStructures.List;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Juan
  */
-public class SearchBooking extends javax.swing.JFrame {
-    //Atributos de la ventana 
+public class SearchHistoric extends javax.swing.JFrame {
+    //Atributos de la ventana
     private static HashTable<Client> clients;
     private static HashTable<Booking> bookings;
     private static HashTable<Historic> historics;
     private static HashTable<Room> rooms;
-    private static BST bstBooking;
+    private static BST bstHistoric;
     
-    public SearchBooking(HashTable clients, HashTable bookings, HashTable historics, HashTable rooms, BST bstBooking) {
+    public SearchHistoric(HashTable clients, HashTable bookings, HashTable historics, HashTable rooms, BST bstHistoric) {
         this.clients = clients;
         this.bookings = bookings;
         this.historics = historics;
         this.rooms = rooms;
-        this.bstBooking = bstBooking;
+        this.bstHistoric = bstHistoric;
         initComponents();
     }
 
@@ -55,7 +54,13 @@ public class SearchBooking extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Ingrese cedula");
+        jLabel1.setText("Ingrese el numero de habitacion");
+
+        input.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputActionPerformed(evt);
+            }
+        });
 
         search.setText("Buscar");
         search.addActionListener(new java.awt.event.ActionListener() {
@@ -75,68 +80,77 @@ public class SearchBooking extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(cancel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(input, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(55, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancel)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(126, 126, 126)
+                        .addComponent(search))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(input, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(input, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(29, 29, 29)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(search)
                     .addComponent(cancel))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputActionPerformed
+
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
         String text = input.getText();
         if(!text.isBlank()){
             try{
-                Booking booking = bstBooking.searchBooking(bookings, bstBooking.getRoot(), Integer.parseInt(text));
-                String output = "Nombre: " + booking.getName() + "\n";
-                output += "Apellido: " + booking.getLastName() + "\n";
-                output += "Cedula: " + booking.getId() + "\n";
-                output += "Correo: " + booking.getEmail() + "\n";
-                output += "Genero: " + booking.getGender() + "\n";
-                output += "Tipo de habitacion: " + booking.getTypeRoom() + "\n";
-                output += "Telefono: " + booking.getPhoneNumber() + "\n";
-                output += "Fecha de llegada: " + booking.getDateIn() + "\n";
-                output += "Fecha de salida: " + booking.getDateOut() + "\n";
-                JOptionPane.showMessageDialog(null, output);
-             }
+                List list = bstHistoric.searchHistoric(historics, bstHistoric.getRoot(), Integer.parseInt(text));
+                if(list.len() > 0){
+                    String output = "";
+                    for (int x = 0; x < list.len(); x++) {
+                        Historic historic = (Historic) list.get(x);
+                        output += "Nombre: " + historic.getName() + "\n";
+                        output += "Apellido: " + historic.getLastName() + "\n";
+                        output += "Cedula: " + historic.getCi() + "\n";
+                        output += "Correo: " + historic.getEmail() + "\n";
+                        output += "Genero: " + historic.getGender() + "\n";
+                        output += "Fecha de llegada: " + historic.getDateIn() + "\n";
+                        output += "Numero de habitacion: " + historic.getNumRoom() + "\n\n";
+                    }
+                    ShowHistoric sh = new ShowHistoric(output);
+                    sh.setVisible(true);
+                }
+                
+            }
             catch(Exception error){
-                JOptionPane.showMessageDialog(null, "Error: dato ingresado no valido");              
+                JOptionPane.showMessageDialog(null, "Error: dato ingresado no valido");
+                System.out.println(error);
             }
         }
-        
-        
     }//GEN-LAST:event_searchActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        Main main = new Main(clients, bookings, historics, rooms);
         this.dispose();
-        main.setVisible(true);
+        Main m = new Main(clients, bookings, historics, rooms);
+        m.setVisible(true);
     }//GEN-LAST:event_cancelActionPerformed
 
     /**
@@ -156,20 +170,20 @@ public class SearchBooking extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SearchBooking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SearchHistoric.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SearchBooking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SearchHistoric.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SearchBooking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SearchHistoric.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SearchBooking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SearchHistoric.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SearchBooking(clients, bookings, historics, rooms, bstBooking).setVisible(true);
+                new SearchHistoric(clients, bookings, historics, rooms , bstHistoric).setVisible(true);
             }
         });
     }

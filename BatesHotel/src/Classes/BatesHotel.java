@@ -8,11 +8,11 @@ import Classes.Booking;
 import DataStructures.BST;
 import DataStructures.HashTable;
 import DataStructures.List;
-import DataStructures.Util;
-import static DataStructures.Util.BOOKING;
-import static DataStructures.Util.CLIENT;
-import static DataStructures.Util.HISTORIC;
-import static DataStructures.Util.ROOM;
+import static Classes.Util.BOOKING;
+import static Classes.Util.CLIENT;
+import static Classes.Util.HISTORIC;
+import static Classes.Util.ROOM;
+import DataStructures.NodeB;
 import Interfaces.LoadWindow;
 import Interfaces.Main;
 import java.io.FileInputStream;
@@ -38,6 +38,32 @@ public class BatesHotel {
     public static void main(String[] args) {
         LoadWindow loadwindow = new LoadWindow();
         loadwindow.setVisible(true);
+//        
+//        HashTable<Booking> bookings = new HashTable(2000);
+//        Util.readExcel(bookings, BOOKING);
+//        
+//        Booking b = bookings.deleteBooking(15505394);
+//        System.out.println(b.getId());
+//        
+//        
+//        b = bookings.deleteBooking(15505394);
+//        System.out.println(b);
+
+            
+        
+
+        
+        
+        
+        
+        
+        
+     
+
+
+        
+        
+
 
     }
     

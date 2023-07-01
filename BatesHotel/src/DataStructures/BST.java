@@ -13,17 +13,20 @@ import static DataStructures.HashTable.BOOKING;
  * @author Georgina
  */
 public class BST<T> {
-
+    //Atributos de la clase
     private NodeB root;
-
+    
+    //Constructor 1: inicializar sin raiz
     public BST() {
         this.root = null;
     }
-
+    
+    //Constructor 2: inicializar con raiz
     public BST(NodeB node) {
         this.root = node;
     }
-
+    
+    //===========================Getters and Setters========================
     public NodeB getRoot() {
         return root;
     }
@@ -31,7 +34,10 @@ public class BST<T> {
     public void setRoot(NodeB root) {
         this.root = root;
     }
-
+    
+    //======================Procedimientos y Metodos=======================
+    
+    //Recorrido preorder
     public void preOrder(NodeB root) {
         if (root != null)
         {
@@ -40,7 +46,8 @@ public class BST<T> {
             preOrder(root.getRight());
         }
     }
-
+    
+    //Recorrido inorden
     public void inOrder(NodeB root) {
         if (root != null)
         {
@@ -49,7 +56,8 @@ public class BST<T> {
             inOrder(root.getRight());
         }
     }
-
+    
+    //Recorrido postorden
     public void postOrder(NodeB root) {
         if (root != null)
         {
@@ -58,7 +66,8 @@ public class BST<T> {
             System.out.println(root.getData() + ", ");
         }
     }
-
+    
+    //Insertar en el arbol
     public void insert(NodeB root, int data) {
         NodeB newNode = new NodeB(data);
         if (this.root == null)
@@ -90,7 +99,8 @@ public class BST<T> {
             }
         }
     }
-
+    
+    
     public void insertBooking(NodeB root, Booking booking) {
         String StrId = booking.getId().replace(".", "");
         int id = Integer.parseInt(StrId);
@@ -128,30 +138,34 @@ public class BST<T> {
             return null;
         } 
         else{
-            if ((int) root.getData() == data){
-                return root;
-            } 
-            else{
-                if (data < (int) root.getData()){
-                    return search(root.getLeft(), data);
-                }
+            if(root != null){
+                if ((int) root.getData() == data){
+                    return root;
+                } 
                 else{
-                    return search(root.getRight(), data);
+                    if (data < (int) root.getData()){
+                        return search(root.getLeft(), data);
+                    }
+                    else{
+                        return search(root.getRight(), data);
+                    }
                 }
+            }
+            else{
+                return null;
             }
         }
     }
     
 
-    public Booking searcBooking(HashTable ht, NodeB current, int data) {
+    public Booking searchBooking(HashTable ht, NodeB current, int data) {
         NodeB node = search(current, data);
         if (node == null){
             return null;
         } 
    
         else{
-            System.out.println(node.getData());
-            Booking booking = ht.get1(node.getData());
+            Booking booking = ht.getBooking(node.getData());
             return booking;
         }
 
@@ -164,7 +178,7 @@ public class BST<T> {
             return null;
         } else
         {
-            List list = ht.gethistoric(node.getData());
+            List list = ht.getHistoric(node.getData());
             return list;
         }
     }

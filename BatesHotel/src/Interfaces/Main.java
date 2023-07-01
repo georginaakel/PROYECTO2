@@ -8,8 +8,11 @@ package Interfaces;
 import Classes.Booking;
 import Classes.Client;
 import Classes.Historic;
+import Classes.Room;
+import Classes.Util;
 import DataStructures.BST;
 import DataStructures.HashTable;
+import DataStructures.List;
 
 /**
  *
@@ -20,15 +23,14 @@ public class Main extends javax.swing.JFrame {
     private static HashTable<Client> clients;
     private static HashTable<Booking> bookings;
     private static HashTable<Historic> historics;
-    private static BST bstBookings;
-    private static BST bstHistorics;
+    private static HashTable<Room> rooms;
+
     
-    public Main(HashTable client, HashTable bookings, HashTable historics, BST bstBookings, BST bstHistorics) {
+    public Main(HashTable client, HashTable bookings, HashTable historics, HashTable rooms) {
         this.clients = client;
         this.bookings = bookings;
         this.historics = historics;
-        this.bstBookings = bstBookings;
-        this.bstHistorics = bstHistorics;
+        this.rooms = rooms;
         initComponents();
     }
 
@@ -46,6 +48,9 @@ public class Main extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         searchclient = new javax.swing.JButton();
         searchbooking = new javax.swing.JButton();
+        searchhistoric = new javax.swing.JButton();
+        checkin = new javax.swing.JButton();
+        checkout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +74,27 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        searchhistoric.setText("Historial de habitaciones");
+        searchhistoric.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchhistoricActionPerformed(evt);
+            }
+        });
+
+        checkin.setText("Check-in");
+        checkin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkinActionPerformed(evt);
+            }
+        });
+
+        checkout.setText("Check-out");
+        checkout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,8 +111,12 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(122, 122, 122)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchbooking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchclient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(checkout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(checkin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(searchhistoric, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(searchbooking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(searchclient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(123, Short.MAX_VALUE))
@@ -104,23 +134,55 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(searchbooking)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(searchhistoric)
+                .addGap(18, 18, 18)
+                .addComponent(checkin)
+                .addGap(18, 18, 18)
+                .addComponent(checkout)
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchclientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchclientActionPerformed
-        SearchClient sc = new SearchClient(clients, bookings, historics, bstBookings, bstHistorics);
+        SearchClient sc = new SearchClient(clients, bookings, historics, rooms);
         this.dispose();
         sc.setVisible(true);
     }//GEN-LAST:event_searchclientActionPerformed
 
     private void searchbookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbookingActionPerformed
-        SearchBooking sb = new SearchBooking(clients, bookings, historics, bstBookings, bstHistorics);
+        BST bstBooking = new BST();
+        Util.hashToTree(bookings, bstBooking);
+        SearchBooking sb = new SearchBooking(clients, bookings, historics, rooms, bstBooking);
         this.dispose();
         sb.setVisible(true);
     }//GEN-LAST:event_searchbookingActionPerformed
+
+    private void searchhistoricActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchhistoricActionPerformed
+        BST bstHistoric = new BST();
+        Util.hashToTreeHistc(historics, bstHistoric);
+        
+//        List list = bstHistoric.searchHistoric(historics, bstHistoric.getRoot(), 298);
+//        list.print();
+        
+        SearchHistoric sh = new SearchHistoric(clients, bookings, historics, rooms, bstHistoric);
+        sh.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_searchhistoricActionPerformed
+
+    private void checkinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinActionPerformed
+        CheckIn cn = new CheckIn(clients, bookings, historics, rooms);
+        this.dispose();
+        cn.setVisible(true);
+    }//GEN-LAST:event_checkinActionPerformed
+
+    private void checkoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutActionPerformed
+        CheckOut ct = new CheckOut(clients, bookings, historics, rooms);
+        this.dispose();
+        ct.setVisible(true);
+    }//GEN-LAST:event_checkoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,16 +214,19 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main(clients, bookings, historics, bstBookings, bstHistorics).setVisible(true);
+                new Main(clients, bookings, historics, rooms).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton checkin;
+    private javax.swing.JButton checkout;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton searchbooking;
     private javax.swing.JButton searchclient;
+    private javax.swing.JButton searchhistoric;
     // End of variables declaration//GEN-END:variables
 }

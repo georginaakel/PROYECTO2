@@ -8,6 +8,7 @@ package Interfaces;
 import Classes.Booking;
 import Classes.Client;
 import Classes.Historic;
+import Classes.Room;
 import DataStructures.BST;
 import DataStructures.HashTable;
 import javax.swing.JOptionPane;
@@ -21,15 +22,13 @@ public class SearchClient extends javax.swing.JFrame {
     private static HashTable<Client> clients;
     private static HashTable<Booking> bookings;
     private static HashTable<Historic> historics;
-    private static BST bstBookings;
-    private static BST bstHistorics;
+    private static HashTable<Room> rooms;
             
-    public SearchClient(HashTable clients, HashTable bookings, HashTable historics, BST bstBookings, BST bstHistorics) {
+    public SearchClient(HashTable clients, HashTable bookings, HashTable historics, HashTable rooms) {
         this.clients = clients;
         this.bookings = bookings;
         this.historics = historics;
-        this.bstBookings = bstBookings;
-        this.bstHistorics = bstHistorics;
+        this.rooms = rooms;
         initComponents();
     }
 
@@ -143,7 +142,7 @@ public class SearchClient extends javax.swing.JFrame {
     }//GEN-LAST:event_searchActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        Main main = new Main(clients, bookings, historics, bstBookings, bstHistorics);
+        Main main = new Main(clients, bookings, historics, rooms);
         this.dispose();
         main.setVisible(true);
     }//GEN-LAST:event_cancelActionPerformed
@@ -178,7 +177,7 @@ public class SearchClient extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SearchClient(clients, bookings, historics, bstBookings, bstHistorics).setVisible(true);
+                new SearchClient(clients, bookings, historics, rooms).setVisible(true);
             }
         });
     }

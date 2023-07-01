@@ -54,16 +54,84 @@ public class HashTable<T> {
     
     //===================Procedimientos y metodos===================
     
-    public void delete(int idx){
+    public Booking deleteBooking(int id){
+        int idx = hash(id);
+        if(idx < 0 || idx >= size){
+            System.out.println("Error: index out of range");
+            return null;
+        }
+        else{
+            if(table[idx] == null){
+                return null;
+            }
+            else{
+                if(table[idx].len() > 1){
+                    for (int x = 0; x < table[idx].len(); x++) {
+                        Booking booking = (Booking) table[idx].get(x);
+                        String bookingId = booking.getId();
+                        bookingId = bookingId.replace(".", "");
+
+                        if(Integer.parseInt(bookingId) == id){
+                            table[idx].pop(x);
+                            return booking;
+                        }
+                    }
+                }
+                else{
+                    Booking booking = (Booking) table[idx].get(0);
+                    String bookingId = booking.getId();
+                    bookingId = bookingId.replace(".", "");
+                    
+                    if(Integer.parseInt(bookingId) == id){
+                        table[idx] = null;
+                        return booking;
+                    }
+                    else{
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public void deleteClient(Client c){
+        int idx = hash(c.getName(), c.getLastName());
+        String name = c.getName();
+        String lastName = c.getLastName();
+        
         if(idx < 0 || idx >= size){
             System.out.println("Error: index out of range");
         }
         else{
-            table[idx] = null;
+            if(table[idx] != null){
+                if(table[idx].len() > 1){
+                    for (int x = 0; x < table[idx].len(); x++) {
+                        Client client = (Client) table[idx].get(x);
+                        String clientName = client.getName();
+                        String clientLastName = client.getLastName();
+
+                        if(clientName.equals(name) && clientLastName.equals(lastName)){
+                            table[idx].pop(x);
+                        }
+                    }
+                }
+                else{
+                    Client client = (Client) table[idx].get(0);
+                    String clientName = client.getName();
+                    String clientLastName = client.getLastName();
+                    
+                    if(clientName.equals(name) && clientLastName.equals(lastName)){
+                        table[idx] = null;
+                    }
+                }
+            }
         }
     }
     
-    //Metodo hash para retornar una llave utilizando el nombre y el apellido
+    
+    
+    //Metodo hash para retornar una llave utilizando el nombre y el apellido de un cliente
     public int hash(String name, String secondName){
         int a = 31; 
         int hash1 = 0;
@@ -86,9 +154,10 @@ public class HashTable<T> {
         }
     }
     
-    //Hash para generar una llave apartir de la cedula en forma de string
+    //Hash para generar una llave apartir de la cedula de una reserva en forma de string
     public int hash(String id){
         id = id.replace(".", "");
+        id = id.replace(" ", "");
         double num = Math.log(Integer.parseInt(id));
         num *= 10000; 
         return (int) num % size;
@@ -224,9 +293,8 @@ public class HashTable<T> {
     }
     
     
-    public Booking get1(int id){
+    public Booking getBooking(int id){
         int idx = hash(Integer.toString(id));
-        System.out.println(idx + " " + table[idx]);
         if(table[idx] != null){
             if(table[idx].len() == 1){
                 return (Booking) table[idx].get(0);
@@ -243,13 +311,12 @@ public class HashTable<T> {
                 }
             }
         }
-        System.out.println("xd");
         return null;
     }
     
     
     //Obtiene el indice de cada valor del hashtable
-    public List getindex(int idx){
+    public List getIndex(int idx){
         if(idx > size || idx < 0){
             System.out.println("No se encuentra el indice.");
             return null;
@@ -260,7 +327,7 @@ public class HashTable<T> {
     }
     
     //Obtengo la habitación en el historico.
-    public List gethistoric(int room){
+    public List getHistoric(int room){
         int idx = hash(room);
         if(table[idx] == null){
             return null;   

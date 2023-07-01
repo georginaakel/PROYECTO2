@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DataStructures;
+package Classes;
 
 import Classes.Booking;
 import Classes.Client;
 import Classes.Historic;
 import Classes.Room;
+import DataStructures.BST;
+import DataStructures.HashTable;
+import DataStructures.List;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -117,9 +120,9 @@ public class Util<T> {
     public static void hashToTree(HashTable ht, BST bst) {
         for (int x = 0; x < ht.getSize(); x++)
         {
-            if (ht.getindex(x) != null)
+            if (ht.getIndex(x) != null)
             {
-                List aux = ht.getindex(x);
+                List aux = ht.getIndex(x);
                 if (aux.len() > 1)
                 {
                     for (int j = 0; j < aux.len(); j++)
@@ -139,9 +142,9 @@ public class Util<T> {
     
     //Arbol para el historico
     public static void hashToTreeHistc(HashTable ht, BST bst){
-        for (int x = 0; x < 10; x++){
-            if(ht.getindex(x) != null){
-                List aux = ht.getindex(x);
+        for (int x = 0; x < ht.getSize(); x++){
+            if(ht.getIndex(x) != null){
+                List aux = ht.getIndex(x);
                 Historic historic = (Historic) aux.get(0);
                 bst.insert(bst.getRoot(), Integer.parseInt( historic.getNumRoom()));
             }
@@ -228,7 +231,7 @@ public class Util<T> {
         }
     }
     
-    public static void insertExcelClient(int idx, int page, Client client){
+    public static void insertExcelClient(int idx, Client client){
         String filePath = "Booking_hotel.xlsx";
 
         try {
@@ -237,24 +240,86 @@ public class Util<T> {
             Workbook workbook = WorkbookFactory.create(file);
 
             // Obtener la hoja de cálculo
-            Sheet sheet = workbook.getSheetAt(page); // Índice de la hoja de cálculo (empezando desde 0)
+            Sheet sheet = workbook.getSheetAt(2); // Índice de la hoja de cálculo (empezando desde 0)
 
             // Crear una nueva fila
             Row row = sheet.createRow(idx);
 
             // Crear celdas y establecer los valores de los datos
-            Cell cell1 = row.createCell(idx); // Índice de la celda (empezando desde 0)
-            cell1.setCellValue("Dato 1");
+            Cell cell1 = row.createCell(0); 
+            cell1.setCellValue(client.getNumRoom());
 
             Cell cell2 = row.createCell(1);
-            cell2.setCellValue("Dato 2");
+            cell2.setCellValue(client.getName());
+            
+            Cell cell3 = row.createCell(2);
+            cell3.setCellValue(client.getLastName());
+
+            Cell cell4 = row.createCell(3);
+            cell4.setCellValue(client.getEmail());
+            
+            Cell cell5 = row.createCell(4); 
+            cell5.setCellValue(client.getGender());
+
+            Cell cell6 = row.createCell(5);
+            cell6.setCellValue(client.getPhone());
+            
+            Cell cell7 = row.createCell(6); 
+            cell7.setCellValue(client.getDateIn());
+
 
             // Guardar los cambios en el archivo Excel
             FileOutputStream outFile = new FileOutputStream(filePath);
             workbook.write(outFile);
             outFile.close();
 
-            System.out.println("Datos insertados correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void deleteExcelClient(Client client){
+        String filePath = "Booking_hotel.xlsx";
+        int idx = Integer.parseInt(client.getNumRoom());
+
+        try {
+            // Abrir el archivo Excel
+            FileInputStream file = new FileInputStream(filePath);
+            Workbook workbook = WorkbookFactory.create(file);
+
+            // Obtener la hoja de cálculo
+            Sheet sheet = workbook.getSheetAt(2); // Índice de la hoja de cálculo (empezando desde 0)
+
+            // Crear una nueva fila
+            Row row = sheet.createRow(idx);
+
+            // Crear celdas y establecer los valores de los datos
+            Cell cell1 = row.createCell(0); 
+            cell1.setCellValue("");
+            
+            Cell cell2 = row.createCell(1); 
+            cell2.setCellValue(client.getName());
+            
+            Cell cell3 = row.createCell(2); 
+            cell3.setCellValue(client.getLastName());
+            
+            Cell cell4 = row.createCell(3); 
+            cell4.setCellValue(client.getEmail());
+            
+            Cell cell5 = row.createCell(4); 
+            cell5.setCellValue(client.getGender());
+            
+            Cell cell6 = row.createCell(5); 
+            cell6.setCellValue(client.getPhone());
+            
+            Cell cell7 = row.createCell(6); 
+            cell7.setCellValue(client.getDateIn());
+            
+
+            // Guardar los cambios en el archivo Excel
+            FileOutputStream outFile = new FileOutputStream(filePath);
+            workbook.write(outFile);
+            outFile.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,8 +329,8 @@ public class Util<T> {
     public static Client toClient(Booking booking, HashTable clients){
         String numHab = "";
         
-        for (int x = 0; x < 10; x++) {
-            if(clients.getindex(x) == null){
+        for (int x = 0; x < 300; x++) {
+            if(clients.getIndex(x) == null){
                 numHab = Integer.toString(x);
             }          
         }       
@@ -296,14 +361,54 @@ public class Util<T> {
                
     }
     
-    public static void checkIn(int id, HashTable bookings){
-        int idx = bookings.hash(id);
-        Booking b = bookings.get1(id);
-        
-        bookings.delete(idx);
-        
+    public static void addHistoric(Historic historic){
+        try {
+            // Abre el archivo de Excel existente
+            FileInputStream file = new FileInputStream("Booking_hotel.xlsx");
+            Workbook workbook = new XSSFWorkbook(file);
+            Sheet sheet = workbook.getSheetAt(3); // Obtiene la hoja de trabajo deseada
+
+            // Obtiene el número de la última fila existente
+            int lastRowNum = sheet.getLastRowNum();
+
+            // Crea una nueva fila en la siguiente posición
+            Row newRow = sheet.createRow(lastRowNum + 1);
+
+            // Agrega celdas a la nueva fila con los valores deseados
+            Cell cell1 = newRow.createCell(0);
+            cell1.setCellValue(historic.getCi());
+
+            Cell cell2 = newRow.createCell(1);
+            cell2.setCellValue(historic.getName());
+            
+            Cell cell3 = newRow.createCell(2);
+            cell3.setCellValue(historic.getLastName());
+
+            Cell cell4 = newRow.createCell(3);
+            cell4.setCellValue(historic.getEmail());
+            
+            Cell cell5 = newRow.createCell(4);
+            cell5.setCellValue(historic.getGender());
+
+            Cell cell6 = newRow.createCell(5);
+            cell6.setCellValue(historic.getDateIn());
+            
+            Cell cell7 = newRow.createCell(6);
+            cell7.setCellValue(historic.getNumRoom());
+
+
+            // Guarda el archivo de Excel actualizado
+            file.close();
+
+            try (FileOutputStream fileOut = new FileOutputStream("Booking_hotel.xlsx")) {
+                workbook.write(fileOut);
+                System.out.println("Fila agregada con éxito.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    
     
     
     
