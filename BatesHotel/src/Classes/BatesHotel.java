@@ -38,6 +38,7 @@ public class BatesHotel {
     public static void main(String[] args) {
         LoadWindow loadwindow = new LoadWindow();
         loadwindow.setVisible(true);
+
     }
     
     

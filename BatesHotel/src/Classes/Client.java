@@ -17,6 +17,7 @@ public class Client extends Person {
     private String gender; 
     private String phone; 
     private String dateIn;
+    private String id;
     
     //Constructor
     public Client(String numRoom, String name, String lastName, String email, String gender, String phone, String dateIn) {
@@ -24,6 +25,16 @@ public class Client extends Person {
         this.numRoom = numRoom;
         this.phone = phone;
     }
+    
+    //Constructor
+    public Client(String numRoom, String name, String lastName, String email, String gender, String phone, String dateIn, String id) {
+        super(name, lastName, email, gender, dateIn);
+        this.id = id;
+        this.numRoom = numRoom;
+        this.phone = phone;
+    }
+    
+    
     
     //========================Getters and Setters==========================
     public String getPhone() {
@@ -33,6 +44,28 @@ public class Client extends Person {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getNumRoom() {
+        return numRoom;
+    }
+
+    public void setNumRoom(String numRoom) {
+        this.numRoom = numRoom;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
+    
+    
+    
+    
 
     
     

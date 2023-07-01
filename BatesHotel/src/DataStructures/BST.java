@@ -95,65 +95,62 @@ public class BST<T> {
         String StrId = booking.getId().replace(".", "");
         int id = Integer.parseInt(StrId);
         NodeB node = new NodeB(id);
-        if (this.root == null)
-        {
+        
+        if (this.root == null){
             this.root = node;
-        } else
-        {
-            if (node.getData() < root.getData())
-            {
-                if (root.getLeft() == null)
-                {
+        }
+        
+        else{
+            if (node.getData() < root.getData()){
+                if (root.getLeft() == null){
                     root.setLeft(node);
-                } else
-                {
+                } 
+                else{
                     insertBooking(root.getLeft(), booking);
                 }
-            } else if (node.getData() > root.getData())
-            {
-                if (root.getRight() == null)
-                {
+            } 
+            else if (node.getData() > root.getData()){
+                if (root.getRight() == null){
                     root.setRight(node);
-                } else
-                {
+                } 
+                else{
                     insertBooking(root.getRight(), booking);
                 }
-            } else
-            {
+            } 
+            else{
                 System.out.println("El elemento ya se encuentra en el Árbol");
             }
         }
     }
 
     public NodeB search(NodeB root, int data) {
-        if (this.root == null)
-        {
+        if (this.root == null){
             return null;
-        } else
-        {
-            if ((int) root.getData() == data)
-            {
+        } 
+        else{
+            if ((int) root.getData() == data){
                 return root;
-            } else
-            {
-                if (data < (int) root.getData())
-                {
+            } 
+            else{
+                if (data < (int) root.getData()){
                     return search(root.getLeft(), data);
-                } else
-                {
+                }
+                else{
                     return search(root.getRight(), data);
                 }
             }
         }
     }
+    
 
     public Booking searcBooking(HashTable ht, NodeB current, int data) {
         NodeB node = search(current, data);
-        if (node == null)
-        {
+        if (node == null){
             return null;
-        } else
-        {
+        } 
+   
+        else{
+            System.out.println(node.getData());
             Booking booking = ht.get1(node.getData());
             return booking;
         }

@@ -54,6 +54,15 @@ public class HashTable<T> {
     
     //===================Procedimientos y metodos===================
     
+    public void delete(int idx){
+        if(idx < 0 || idx >= size){
+            System.out.println("Error: index out of range");
+        }
+        else{
+            table[idx] = null;
+        }
+    }
+    
     //Metodo hash para retornar una llave utilizando el nombre y el apellido
     public int hash(String name, String secondName){
         int a = 31; 
@@ -81,7 +90,7 @@ public class HashTable<T> {
     public int hash(String id){
         id = id.replace(".", "");
         double num = Math.log(Integer.parseInt(id));
-        num *= 100; 
+        num *= 10000; 
         return (int) num % size;
     }
     
@@ -216,7 +225,8 @@ public class HashTable<T> {
     
     
     public Booking get1(int id){
-        int idx = hash(id);
+        int idx = hash(Integer.toString(id));
+        System.out.println(idx + " " + table[idx]);
         if(table[idx] != null){
             if(table[idx].len() == 1){
                 return (Booking) table[idx].get(0);
@@ -233,6 +243,7 @@ public class HashTable<T> {
                 }
             }
         }
+        System.out.println("xd");
         return null;
     }
     
@@ -257,6 +268,8 @@ public class HashTable<T> {
             return table[idx];
         }
     }
+    
+    
 
 }
 

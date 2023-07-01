@@ -10,7 +10,9 @@ import Classes.Client;
 import Classes.Historic;
 import Classes.Room;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -19,8 +21,12 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 /**
  *
@@ -119,8 +125,7 @@ public class Util<T> {
                     for (int j = 0; j < aux.len(); j++)
                     {
                         Booking data = (Booking) aux.get(j);
-                        bst.insertBooking(bst.getRoot(), data);
-                        
+                        bst.insertBooking(bst.getRoot(), data);                      
                     }
                 }
                 else if(aux.len() == 1){
@@ -133,16 +138,173 @@ public class Util<T> {
     }
     
     //Arbol para el historico
-    public static void HashToTreeHistc(HashTable ht, BST bst){
-        for (int x = 0; x < 10; x++)
-        {
+    public static void hashToTreeHistc(HashTable ht, BST bst){
+        for (int x = 0; x < 10; x++){
             if(ht.getindex(x) != null){
                 List aux = ht.getindex(x);
                 Historic historic = (Historic) aux.get(0);
-                bst.insert(bst.getRoot(),Integer.parseInt( historic.getNumRoom()));
+                bst.insert(bst.getRoot(), Integer.parseInt( historic.getNumRoom()));
             }
         }
     }
+    
+    public static void deleteRowExcel(int idx, int page){
+        String filePath = "Booking_hotel.xlsx";
+
+        try {
+            // Abrir el archivo Excel
+            FileInputStream file = new FileInputStream(filePath);
+            Workbook workbook = WorkbookFactory.create(file);
+
+            // Obtener la hoja de cálculo
+            Sheet sheet = workbook.getSheetAt(page); // Índice de la hoja de cálculo (empezando desde 0)
+
+            // Obtener la fila a eliminar
+            Row row = sheet.getRow(idx);
+
+            // Eliminar la fila de la hoja de cálculo
+            sheet.removeRow(row);
+
+            // Ajustar las referencias de las filas siguientes
+            sheet.shiftRows(idx + 1, sheet.getLastRowNum(), -1);
+
+            // Guardar los cambios en el archivo Excel
+            FileOutputStream outFile = new FileOutputStream(filePath);
+            workbook.write(outFile);
+            outFile.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void deleteByValue(int id){
+        DecimalFormat format = new DecimalFormat("#,###");
+        String num = format.format(id);
+        String filePath = "Booking_hotel.xlsx";
+
+        try {
+            // Abrir el archivo Excel
+            FileInputStream file = new FileInputStream(filePath);
+            Workbook workbook = WorkbookFactory.create(file);
+
+            // Obtener la hoja de cálculo
+            Sheet sheet = workbook.getSheetAt(0); // Índice de la hoja de cálculo (empezando desde 0)
+
+            // Iterar sobre todas las filas en reversa para evitar problemas de índices cambiantes
+            int start = -1;
+            for (int rowIndex = 0; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
+                if (row != null) {
+                    Cell cell = row.getCell(0);
+                    if(cell.getCellType() == 0){
+                        int cellNum = (int) cell.getNumericCellValue();
+
+                        if (cellNum == id) {
+                            start = rowIndex;
+                            sheet.removeRow(row);
+                            break;
+
+                        }                       
+                    }
+                }
+            }
+            
+            if(start != -1){
+                // Ajustar las referencias de las filas siguientes
+                sheet.shiftRows(start + 1, sheet.getLastRowNum(), -1);
+
+                // Guardar los cambios en el archivo Excel
+                FileOutputStream outFile = new FileOutputStream(filePath);
+                workbook.write(outFile);
+                outFile.close();
+
+                // Cerrar el archivo Excel
+                workbook.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void insertExcelClient(int idx, int page, Client client){
+        String filePath = "Booking_hotel.xlsx";
+
+        try {
+            // Abrir el archivo Excel
+            FileInputStream file = new FileInputStream(filePath);
+            Workbook workbook = WorkbookFactory.create(file);
+
+            // Obtener la hoja de cálculo
+            Sheet sheet = workbook.getSheetAt(page); // Índice de la hoja de cálculo (empezando desde 0)
+
+            // Crear una nueva fila
+            Row row = sheet.createRow(idx);
+
+            // Crear celdas y establecer los valores de los datos
+            Cell cell1 = row.createCell(idx); // Índice de la celda (empezando desde 0)
+            cell1.setCellValue("Dato 1");
+
+            Cell cell2 = row.createCell(1);
+            cell2.setCellValue("Dato 2");
+
+            // Guardar los cambios en el archivo Excel
+            FileOutputStream outFile = new FileOutputStream(filePath);
+            workbook.write(outFile);
+            outFile.close();
+
+            System.out.println("Datos insertados correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static Client toClient(Booking booking, HashTable clients){
+        String numHab = "";
+        
+        for (int x = 0; x < 10; x++) {
+            if(clients.getindex(x) == null){
+                numHab = Integer.toString(x);
+            }          
+        }       
+        
+        String name = booking.getName();
+        String lastName = booking.getLastName();
+        String email = booking.getEmail();
+        String gender = booking.getGender();
+        String phone = booking.getPhoneNumber();
+        String dateIn = booking.getDateIn();
+        String id = booking.getId();
+        
+        Client client = new Client(numHab, name, lastName, email, gender, phone, dateIn, id);
+        return client;
+    }
+    
+    public static Historic toHistoric(Client client, HashTable historic){
+        String numRoom = client.getNumRoom();
+        String name = client.getName();
+        String lastName = client.getLastName();
+        String email = client.getEmail();
+        String gender = client.getGender();
+        String dateIn = client.getDateIn();
+        String id = client.getId();
+        
+        Historic h = new Historic(id, name, lastName, email, gender, dateIn, numRoom);
+        return h;
+               
+    }
+    
+    public static void checkIn(int id, HashTable bookings){
+        int idx = bookings.hash(id);
+        Booking b = bookings.get1(id);
+        
+        bookings.delete(idx);
+        
+    }
+    
+    
     
     
 

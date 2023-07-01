@@ -5,6 +5,10 @@
  */
 package Interfaces;
 
+import Classes.Booking;
+import Classes.Client;
+import Classes.Historic;
+import DataStructures.BST;
 import DataStructures.HashTable;
 
 /**
@@ -13,10 +17,18 @@ import DataStructures.HashTable;
  */
 public class Main extends javax.swing.JFrame {
     //Atributos de la ventana principal
-    private static HashTable clients;
+    private static HashTable<Client> clients;
+    private static HashTable<Booking> bookings;
+    private static HashTable<Historic> historics;
+    private static BST bstBookings;
+    private static BST bstHistorics;
     
-    public Main(HashTable client) {
+    public Main(HashTable client, HashTable bookings, HashTable historics, BST bstBookings, BST bstHistorics) {
         this.clients = client;
+        this.bookings = bookings;
+        this.historics = historics;
+        this.bstBookings = bstBookings;
+        this.bstHistorics = bstHistorics;
         initComponents();
     }
 
@@ -33,7 +45,7 @@ public class Main extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         searchclient = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        searchbooking = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,7 +62,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
+        searchbooking.setText("Busqueda de reservacion");
+        searchbooking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchbookingActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,16 +83,13 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(148, 148, 148))))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(searchclient)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addComponent(jButton1)))
-                .addGap(104, 107, Short.MAX_VALUE))
+                .addGap(122, 122, 122)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(searchbooking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchclient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(123, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,12 +99,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(searchclient)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(searchbooking)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(176, Short.MAX_VALUE))
         );
 
@@ -98,10 +111,16 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchclientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchclientActionPerformed
-        SearchClient sc = new SearchClient(clients);
+        SearchClient sc = new SearchClient(clients, bookings, historics, bstBookings, bstHistorics);
         this.dispose();
         sc.setVisible(true);
     }//GEN-LAST:event_searchclientActionPerformed
+
+    private void searchbookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbookingActionPerformed
+        SearchBooking sb = new SearchBooking(clients, bookings, historics, bstBookings, bstHistorics);
+        this.dispose();
+        sb.setVisible(true);
+    }//GEN-LAST:event_searchbookingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,16 +152,16 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main(clients).setVisible(true);
+                new Main(clients, bookings, historics, bstBookings, bstHistorics).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton searchbooking;
     private javax.swing.JButton searchclient;
     // End of variables declaration//GEN-END:variables
 }

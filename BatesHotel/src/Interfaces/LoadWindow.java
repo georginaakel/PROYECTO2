@@ -1,8 +1,14 @@
 package Interfaces;
 
 
+import Classes.Booking;
+import Classes.Client;
+import Classes.Historic;
+import DataStructures.BST;
 import DataStructures.HashTable;
+import static DataStructures.HashTable.BOOKING;
 import static DataStructures.HashTable.CLIENT;
+import static DataStructures.HashTable.HISTORIC;
 import DataStructures.Util;
 
 /*
@@ -18,10 +24,14 @@ import DataStructures.Util;
 public class LoadWindow extends javax.swing.JFrame {
     //Atributos de la interfaz
     private HashTable clients;
+    private HashTable bookings;
+    private HashTable historics;
     
     //Constructor
     public LoadWindow() {
-        this.clients = new HashTable(500);
+        this.clients = new HashTable<Client>(500);
+        this.bookings = new HashTable<Booking>(2000);
+        this.historics = new HashTable<Historic>(2000);
         initComponents();
     }
 
@@ -85,7 +95,15 @@ public class LoadWindow extends javax.swing.JFrame {
 
     private void chargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chargeActionPerformed
         Util.readExcel(clients, CLIENT);
-        Main main = new Main(clients);
+        Util.readExcel(bookings, BOOKING);
+        Util.readExcel(historics, HISTORIC);
+        
+        BST bstBooking = new BST();
+        BST bstHistoric = new BST();
+        Util.hashToTree(bookings, bstBooking);
+        Util.hashToTreeHistc(historics, bstHistoric);           
+        
+        Main main = new Main(clients, historics, bookings, bstBooking, bstHistoric);
         this.dispose();
         main.setVisible(true);
     }//GEN-LAST:event_chargeActionPerformed
