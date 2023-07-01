@@ -18,7 +18,7 @@ public class Client extends Person {
     private String phone; 
     private String dateIn;
     private String id;
-    
+    //mierda
     //Constructor
     public Client(String numRoom, String name, String lastName, String email, String gender, String phone, String dateIn) {
         super(name, lastName, email, gender, dateIn);
